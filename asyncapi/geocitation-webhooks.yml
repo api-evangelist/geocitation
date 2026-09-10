@@ -1,0 +1,36 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/documentation/webhooks
+spec_type: Webhooks
+note: >-
+  The provider documents HMAC-signed webhooks but publishes no AsyncAPI document.
+  A Server-Sent Events stream (GET /v1/audits/{audit_id}/stream) also delivers
+  live audit events over HTTP.
+signature:
+  header: X-GEOCitation-Signature
+  algorithm: HMAC-SHA256
+  format: sha256=<hexdigest>
+  verify: Compute HMAC-SHA256 of the raw request body with your webhook secret and compare securely.
+event_type_header: X-GEOCitation-Event
+delivery:
+  retry_schedule: [0s, 30s, 5m]
+  ack: endpoint must return a 2xx status
+events:
+- name: audit.completed
+  description: Sent when an audit finishes successfully
+  payload_fields:
+    event: string
+    audit_id: uuid
+    status: completed
+    quality_status: success
+    total_ms: integer (execution time in ms)
+- name: audit.failed
+  description: Sent when an audit encounters an error
+  payload_fields:
+    event: string
+    audit_id: uuid
+    status: failed
+    error_message: string
+sse_stream:
+  operation: openapi/geocitation-openapi.json#stream_audit_v1_audits__audit_id__stream_get
+  content_type: text/event-stream

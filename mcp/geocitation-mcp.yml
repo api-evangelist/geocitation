@@ -1,0 +1,44 @@
+generated: '2026-09-10'
+method: derived
+status: candidate
+source: openapi/geocitation-openapi.json
+note: >-
+  No official hosted or stdio MCP server was found (probed https://api.geocitation.io/mcp,
+  /v1/mcp and https://mcp.geocitation.io/mcp — all 404 / unreachable; no npm/PyPI package).
+  This is a DERIVED candidate tool list from the OpenAPI operations; nobody ships a server.
+  No MCPServer pointer is emitted.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: derived
+server:
+  name: geocitation
+  transport: http
+tools:
+- name: create_audit
+  description: Launch a Market or Gap AEO/GEO audit
+  source_operation: openapi/geocitation-openapi.json#create_audit_v1_audits_post
+- name: list_audits
+  description: List the user's audits (paginated)
+  source_operation: openapi/geocitation-openapi.json#list_audits_v1_audits_get
+- name: get_audit
+  description: Get audit status plus full JSON output when completed
+  source_operation: openapi/geocitation-openapi.json#get_audit_v1_audits__audit_id__get
+- name: get_audit_status
+  description: Lightweight audit status (SSE fallback)
+  source_operation: openapi/geocitation-openapi.json#get_audit_status_v1_audits__audit_id__status_get
+- name: get_document
+  description: Retrieve a Markdown deliverable from a completed audit
+  source_operation: openapi/geocitation-openapi.json#get_document_v1_audits__audit_id__documents__doc_type__get
+- name: get_manifest
+  description: Retrieve the SOC2 bank-proof manifest.json for a completed audit
+  source_operation: openapi/geocitation-openapi.json#get_manifest_v1_audits__audit_id__manifest_get
+- name: read_usage
+  description: Read the user's audit quota state (plan, used, limit, remaining)
+  source_operation: openapi/geocitation-openapi.json#read_usage_v1_usage_get
+- name: get_kpi_catalog
+  description: Full catalog of KPIs (35 N20 + 15 nuggets)
+  source_operation: openapi/geocitation-openapi.json#get_kpi_catalog_v1_meta_kpi_catalog_get

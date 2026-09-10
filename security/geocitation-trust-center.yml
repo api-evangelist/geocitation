@@ -1,0 +1,14 @@
+generated: '2026-09-10'
+method: searched
+probe: true
+source: https://www.geocitation.io/en/security
+url: https://www.geocitation.io/en/security
+certifications:
+- SOC 2
+- GDPR
+evidence:
+- source: https://www.geocitation.io/en/security
+  keywords:
+  - soc2
+  - trust center
+  - gdpr

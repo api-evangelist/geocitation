@@ -1,0 +1,34 @@
+generated: '2026-09-10'
+method: probed
+source: live probes 2026-09-10
+note: >-
+  Every named /.well-known/ path was probed on all known hosts and returned 404
+  (www.geocitation.io serves an 8KB SPA shell for unknown paths; api.geocitation.io
+  returns a real 404 {"detail":"Not Found"}). No document was served, so NO
+  WellKnown / SecurityTxt pointer is emitted. Negative-control paths also 404 (no
+  path-echo). /apis.json and /apis.yml are not served (SPA 404).
+hosts:
+- host: https://www.geocitation.io
+  path_echo_control: passed
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+  - {path: /.well-known/api-catalog, status: 404, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+  - {path: /apis.json, status: 404, file: null}
+  - {path: /.well-known/apis.json, status: 404, file: null}
+  - {path: /apis.yml, status: 404, file: null}
+- host: https://api.geocitation.io
+  path_echo_control: passed
+  documents:
+  - {path: /.well-known/security.txt, status: 404, file: null}
+  - {path: /.well-known/openid-configuration, status: 404, file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+  - {path: /.well-known/api-catalog, status: 404, file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+  - {path: /apis.json, status: 404, file: null}
+  - {path: /.well-known/apis.json, status: 404, file: null}
+  - {path: /apis.yml, status: 404, file: null}

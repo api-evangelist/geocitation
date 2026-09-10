@@ -1,14 +1,32 @@
 name: GEOCitation
-description: >-
-  White-label AEO/GEO (Answer Engine / Generative Engine Optimization) audit API for SEO agencies and SaaS platforms. A
-  single async REST API that runs AI-visibility/citation-gap audits and returns structured JSON with citation
-  probabilities, entity/semantic-cluster data, E-E-A-T scores, and content recommendations.
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/white-label-seo-geo-audit-api-for-agency-geocitation/refs/heads/main/apis.yml
+description: White-label AEO/GEO (Answer Engine / Generative Engine Optimization) audit API for SEO agencies
+  and SaaS platforms. A single async REST API that runs AI-visibility/citation-gap audits and returns
+  structured JSON with citation probabilities, entity/semantic-cluster data, E-E-A-T scores, and content
+  recommendations.
+url: https://raw.githubusercontent.com/api-evangelist/geocitation/refs/heads/main/apis.yml
 created: '2026-09-10'
 modified: '2026-09-10'
 specificationVersion: '0.21'
 tags:
+- SEO
+- GEO
+- AEO
+- AI Search Visibility
+- Content Intelligence
+- Competitive Intelligence
+- Marketing
+- MarTech
+- White-label
+- Agency Tooling
+- Web Data & Analytics
+apis:
+- name: GEOCitation Audit API
+  description: Asynchronous REST API to launch AEO/GEO audits (Market Intelligence and Gap Analysis),
+    poll status, and retrieve structured JSON output. API-key auth via X-API-Key header; HMAC-SHA256 signed
+    webhooks for audit.completed and audit.failed events.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
   - SEO
   - GEO
   - AEO
@@ -20,33 +38,74 @@ tags:
   - White-label
   - Agency Tooling
   - Web Data & Analytics
-apis:
-  - name: GEOCitation Audit API
-    description: >-
-      Asynchronous REST API to launch AEO/GEO audits (Market Intelligence and Gap Analysis), poll status, and retrieve
-      structured JSON output. API-key auth via X-API-Key header; HMAC-SHA256 signed webhooks for audit.completed and
-      audit.failed events.
-    humanURL: https://www.geocitation.io/en/documentation
-    baseURL: https://api.geocitation.io/v1
-    tags:
-      - SEO
-      - GEO
-      - AEO
-      - AI Search Visibility
-      - Content Intelligence
-      - Competitive Intelligence
-      - Marketing
-      - MarTech
-      - White-label
-      - Agency Tooling
-      - Web Data & Analytics
-    properties:
-      - type: Documentation
-        url: https://www.geocitation.io/en/documentation
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-openapi.json
+  - type: APIReference
+    url: https://api.geocitation.io/docs
+  image: https://www.geocitation.io/icon.svg
 maintainers:
-  - FN: GEOCitation Support
-    url: mailto:support@geocitation.io
-generated:
+- FN: GEOCitation Support
+  url: https://www.geocitation.io
+  email: support@geocitation.io
+common:
+- type: Website
+  url: https://www.geocitation.io
+- type: AgenticAccess
+  url: agentic-access/geocitation-agentic-access.yml
+- type: TrustCenter
+  url: security/geocitation-trust-center.yml
+- type: DomainSecurity
+  url: security/geocitation-domain-security.yml
+- type: Authentication
+  url: authentication/geocitation-authentication.yml
+- type: ErrorCatalog
+  url: errors/geocitation-problem-types.yml
+- type: RateLimits
+  url: rate-limits/geocitation-rate-limits.yml
+- type: Plans
+  url: plans/geocitation-plans-pricing.yml
+- type: Conventions
+  url: conventions/geocitation-conventions.yml
+- type: Lifecycle
+  url: lifecycle/geocitation-lifecycle.yml
+- type: Conformance
+  url: conformance/geocitation-conformance.yml
+- type: Compliance
+  url: https://www.geocitation.io/en/security
+- type: DataModel
+  url: data-model/geocitation-data-model.yml
+- type: Webhooks
+  url: asyncapi/geocitation-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/geocitation-llms.txt
+- type: Overlay
+  url: overlays/geocitation-openapi-overlay.yaml
+- type: DeveloperPortal
+  url: https://www.geocitation.io/en
+- type: Documentation
+  url: https://www.geocitation.io/en/documentation
+- type: GettingStarted
+  url: https://www.geocitation.io/en/documentation/getting-started
+- type: Pricing
+  url: https://www.geocitation.io/en/pricing
+- type: Support
+  url: https://www.geocitation.io/en/contact
+- type: TermsOfService
+  url: https://www.geocitation.io/en/terms
+- type: PrivacyPolicy
+  url: https://www.geocitation.io/en/privacy
+- type: SignUp
+  url: https://www.geocitation.io/en/login
+image: https://www.geocitation.io/icon.svg
+x-enrichment:
+  date: '2026-09-10'
+  status: enriched
+  artifacts_added: 17
+  pass: local-v3
+x-generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 85

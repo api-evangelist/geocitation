@@ -1,0 +1,37 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/security
+derived_from: openapi/geocitation-openapi.json
+standards:
+- id: oauth2
+  conforms: false
+  evidence: OpenAPI declares only http/bearer + docs use X-API-Key; no oauth2 securityScheme
+- id: bearer-token
+  conforms: true
+  evidence: openapi securitySchemes HTTPBearer (http, scheme bearer)
+- id: api-key
+  conforms: true
+  evidence: X-API-Key header documented; live WWW-Authenticate advertises ApiKey
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'errors use FastAPI {detail: ...} envelope, not application/problem+json'
+- id: rfc8594-sunset
+  conforms: false
+- id: server-sent-events
+  conforms: true
+  evidence: GET /v1/audits/{audit_id}/stream serves text/event-stream live events
+- id: hmac-signed-webhooks
+  conforms: true
+  evidence: X-GEOCitation-Signature header, HMAC-SHA256 of raw body (sha256=hexdigest)
+compliance:
+- id: soc2
+  published: true
+  evidence: https://www.geocitation.io/en/security
+- id: gdpr
+  published: true
+  evidence: https://www.geocitation.io/en/security; API exposes /v1/opt-out for GDPR opt-out
+domain_standard:
+  present: false
+  note: >-
+    The AEO/GEO (answer-engine / generative-engine optimization) audit space has
+    no established machine-readable domain standard; none is asserted (reward-only field).

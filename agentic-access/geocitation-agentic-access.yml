@@ -1,0 +1,204 @@
+generated: '2026-09-10'
+method: generated
+source: openapi/geocitation-openapi.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 17
+  by_action_class:
+    acting: 3
+    connected: 14
+  by_consequence:
+    write: 3
+    read: 14
+  human_in_the_loop_required: 0
+operations:
+- path: /v1/audits
+  method: post
+  operationId: create_audit_v1_audits_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/audits
+  method: get
+  operationId: list_audits_v1_audits_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/stream
+  method: get
+  operationId: stream_audit_v1_audits__audit_id__stream_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/status
+  method: get
+  operationId: get_audit_status_v1_audits__audit_id__status_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/events
+  method: get
+  operationId: list_audit_events_v1_audits__audit_id__events_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/retry-doc/{doc_slot}
+  method: post
+  operationId: retry_doc_node_v1_audits__audit_id__retry_doc__doc_slot__post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/audits/{audit_id}
+  method: get
+  operationId: get_audit_v1_audits__audit_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/documents/{doc_type}
+  method: get
+  operationId: get_document_v1_audits__audit_id__documents__doc_type__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audits/{audit_id}/manifest
+  method: get
+  operationId: get_manifest_v1_audits__audit_id__manifest_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/usage
+  method: get
+  operationId: read_usage_v1_usage_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/meta/kpi-catalog
+  method: get
+  operationId: get_kpi_catalog_v1_meta_kpi_catalog_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/meta/icp-priority/{icp_key}
+  method: get
+  operationId: get_icp_priority_v1_meta_icp_priority__icp_key__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/meta/branding
+  method: get
+  operationId: get_branding_v1_meta_branding_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/opt-out
+  method: post
+  operationId: create_opt_out_v1_opt_out_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/opt-out
+  method: get
+  operationId: list_opt_outs_v1_opt_out_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /health
+  method: get
+  operationId: health_health_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /health/detailed
+  method: get
+  operationId: health_detailed_health_detailed_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none

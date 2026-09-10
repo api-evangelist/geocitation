@@ -1,0 +1,28 @@
+generated: '2026-09-10'
+method: searched
+source: openapi/geocitation-openapi.json
+docs: https://www.geocitation.io/en/documentation
+summary:
+  types:
+  - http
+  - apiKey
+  api_key_in:
+  - header
+  notes: >-
+    The OpenAPI declares only HTTPBearer (http/bearer), but the live API and the
+    published docs accept an API key in the X-API-Key header (keys are prefixed
+    "geo_citation_"). An unauthenticated request to https://api.geocitation.io/v1/usage
+    returns 401 with `WWW-Authenticate: Bearer, ApiKey`, confirming both schemes.
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/geocitation-openapi.json
+- name: ApiKeyHeader
+  type: apiKey
+  in: header
+  parameter_name: X-API-Key
+  key_prefix: geo_citation_
+  source: https://www.geocitation.io/en/documentation
+  evidence: 'live 401 WWW-Authenticate: Bearer, ApiKey; docs example -H "X-API-Key: geo_citation_YOUR_KEY"'

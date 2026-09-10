@@ -1,0 +1,54 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/documentation
+derived_from: openapi/geocitation-openapi.json
+authentication:
+  style: api-key-header
+  header: X-API-Key
+  key_prefix: geo_citation_
+  also_accepts: 'bearer token (WWW-Authenticate: Bearer, ApiKey)'
+  cross_ref: authentication/geocitation-authentication.yml
+async_model:
+  pattern: submit-and-poll / webhook
+  submit: POST /v1/audits returns 202 with audit_id
+  completion: 'typically 5-7 minutes'
+  poll: GET /v1/audits/{audit_id}/status  (light) or GET /v1/audits/{audit_id} (full output)
+  stream: GET /v1/audits/{audit_id}/stream  (Server-Sent Events, live audit events)
+  notify: HMAC-signed webhook (see asyncapi/geocitation-webhooks.yml)
+pagination:
+  style: paginated list envelope
+  operation: openapi/geocitation-openapi.json#list_audits_v1_audits_get
+  response_schema: PaginatedResponse_AuditListItem_
+request_tracing:
+  header: X-Request-Id
+  direction: response
+  evidence: 'observed x-request-id on live 401 from https://api.geocitation.io/v1/usage'
+versioning:
+  scheme: uri-path
+  current: v1
+  cross_ref: lifecycle/geocitation-lifecycle.yml
+error_envelope:
+  shape: '{"detail": ...}'
+  rfc9457: false
+  cross_ref: errors/geocitation-problem-types.yml
+rate_limit_signaling:
+  exhaustion_status: 429
+  header: Retry-After
+  quota_status: 402
+  cross_ref: rate-limits/geocitation-rate-limits.yml
+idempotency:
+  coverage: none
+  mechanism: null
+  note: >-
+    No idempotency-key header or replay-protection mechanism is documented, and
+    the OpenAPI declares no Idempotency-Key parameter on any of the three write
+    operations (create_audit, retry_doc_node, create_opt_out).
+reversibility:
+  grade: none
+  applies_to: write surface (create_audit, retry_doc_node, create_opt_out)
+  note: >-
+    No cancel/void/undo/delete operation is documented for a submitted audit or
+    for an opt-out entry. Audits are analysis jobs (no external side effect to
+    reverse), and the OpenAPI exposes no DELETE operations. retry_doc_node re-runs
+    a failed document node but is not a reversal. No reversal window is stated;
+    none is asserted here.

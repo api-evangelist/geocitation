@@ -1,0 +1,28 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for GEOCitation API
+  version: 1.0.0
+extends: openapi/geocitation-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-09-10'
+    x-apievangelist-provider: geocitation
+    contact:
+      name: GEOCitation Support
+      url: https://www.geocitation.io/en/contact
+      email: support@geocitation.io
+    termsOfService: https://www.geocitation.io/en/terms
+- target: $.servers
+  description: The harvested spec declares no servers[]; add the documented production base URL.
+  update:
+  - url: https://api.geocitation.io/v1
+    description: Production
+- target: $.components.securitySchemes
+  description: The live API and docs also accept an X-API-Key header; the harvested spec only declares HTTPBearer.
+  update:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'API key (prefixed geo_citation_). Live WWW-Authenticate advertises: Bearer, ApiKey.'

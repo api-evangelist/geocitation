@@ -1,0 +1,50 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/pricing
+currency: USD
+billing_period: monthly
+annual_discount: 15%
+extra_seat: $15/month (Discovery, Standard, Pro)
+plan_count: 5
+plans:
+- name: Free Trial
+  price: 0
+  currency: USD
+  period: one-time
+  included_audits: 1
+  quota_unit: audit (Market or Gap)
+  overage: null
+- name: Discovery
+  price: 49
+  currency: USD
+  period: month
+  included_audits: 10
+  quota_unit: audits/month
+  overage: $4.90 per additional audit
+  rate_limit_tier: Standard
+- name: Standard
+  price: 149
+  currency: USD
+  period: month
+  included_audits: 40
+  quota_unit: audits/month
+  overage: $3.90 per additional audit
+  rate_limit_tier: Elevated
+  most_popular: true
+- name: Pro
+  price: 299
+  currency: USD
+  period: month
+  included_audits: 100
+  quota_unit: audits/month
+  overage: $2.90 per additional audit
+  rate_limit_tier: Priority
+- name: Enterprise
+  price: contact
+  currency: USD
+  period: month
+  included_audits: 500+
+  quota_unit: audits/month
+  overage: null
+  rate_limit_tier: Dedicated / custom
+  note: '"Talk to an Architect" — custom quote'

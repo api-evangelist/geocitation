@@ -1,0 +1,30 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/documentation/errors
+limit_count: 2
+limits:
+- scope: per-key (global request rate)
+  window: 1m
+  limit: 100
+  unit: requests
+  note: 100 requests/minute globally per API key
+- scope: per-key (audit creation)
+  window: 1h
+  limit: 20
+  unit: audits
+  note: 20 audits/hour per key
+exhaustion:
+  status: 429
+  response_headers:
+  - Retry-After
+  note: On 429, retry after the Retry-After header value.
+quota:
+  model: plan-based monthly audit quota, separate from rate limits
+  status_on_exhaustion: 402
+  usage_endpoint: openapi/geocitation-openapi.json#read_usage_v1_usage_get
+  usage_fields: [plan, used, limit, remaining]
+observed_headers:
+  note: >-
+    No X-RateLimit-*/RateLimit-* headers were observed on an unauthenticated 401
+    response; the docs publish the numeric limits and Retry-After but do not
+    document per-response quota headers.

@@ -1,0 +1,39 @@
+generated: '2026-09-10'
+method: derived
+source: openapi/geocitation-openapi.json
+entities:
+- name: Audit
+  id_field: audit_id
+  id_type: uuid
+  key_fields: [audit_type, keyword, user_url, language, country, intent, status, created_at, completed_at, citation_rank_value]
+  created_by: openapi/geocitation-openapi.json#create_audit_v1_audits_post
+  enums:
+    audit_type: [market, gap]
+    intent: [auto, informational, commercial, transactional]
+    language: [fr, en]
+    country: [BE, CA, CH, DE, ES, FR, GB, JP, MA, SN, US]
+- name: AuditEvent
+  id_field: node_id
+  key_fields: [audit_id, event_type, node_id, message, progress_pct, payload, created_at]
+  note: Per-node progress/event stream row for an audit (replay + SSE hydration).
+- name: AuditDocument
+  key_fields: [doc_type]
+  enums:
+    doc_type: [content_gap_report, remediation_blueprint, laser_optimization_brief, citation_gap_report, semantic_blueprint, laser_execution_outline]
+  note: Markdown deliverables produced by a completed audit; also a SOC2 bank-proof manifest.json.
+- name: OptOut
+  id_field: id
+  key_fields: [domain, requested_by_email, reason, verified_via, status, created_at, approved_at]
+  note: GDPR opt-out registry entry (admin only).
+- name: Usage
+  key_fields: [plan, used, limit, remaining]
+  note: Per-user audit quota state.
+relationships:
+- from: AuditEvent
+  to: Audit
+  type: belongs_to
+  via: audit_id
+- from: AuditDocument
+  to: Audit
+  type: belongs_to
+  via: audit_id (path)

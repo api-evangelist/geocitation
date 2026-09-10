@@ -1,0 +1,61 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.geocitation.io/en/documentation/errors
+derived_from: openapi/geocitation-openapi.json
+format: custom
+envelope:
+  standard: '{"detail": "string message"}'
+  quota_402: '{"detail": {"error": "quota_exceeded", "used": <int>, "limit": <int>, "plan": "<string>"}}'
+  rfc9457: false
+  note: >-
+    Errors use a FastAPI-style {"detail": ...} envelope, not RFC 9457
+    application/problem+json. 422 validation errors return the FastAPI
+    HTTPValidationError shape (detail[] with loc/msg/type).
+problems:
+- status: 400
+  title: Invalid request structure
+  cause: Malformed payload (e.g. a disallowed URL)
+  remediation: Validate request body contents
+- status: 401
+  title: Authentication failed
+  cause: X-API-Key (or bearer token) missing, invalid, or revoked
+  remediation: Verify API key validity and presence
+  evidence: 'live 401 WWW-Authenticate: Bearer, ApiKey'
+- status: 402
+  title: Quota exhausted
+  cause: No active plan or plan audit limit exceeded
+  remediation: Upgrade subscription via billing page
+  envelope_field: detail.error=quota_exceeded
+- status: 404
+  title: Resource not found
+  cause: The audit_id does not exist or does not belong to your account
+  remediation: Verify audit ID ownership
+  source_operation: openapi/geocitation-openapi.json#get_document_v1_audits__audit_id__documents__doc_type__get
+- status: 409
+  title: Invalid state transition
+  cause: Operation incompatible with the current audit state (e.g. fetching a document before status=completed)
+  remediation: Wait for the appropriate state or create a new audit
+  source_operation: openapi/geocitation-openapi.json#get_document_v1_audits__audit_id__documents__doc_type__get
+- status: 422
+  title: Validation error
+  cause: Invalid audit_type, keyword length, or country code
+  remediation: Correct input parameters
+  schema: HTTPValidationError
+  source_operation: openapi/geocitation-openapi.json#create_audit_v1_audits_post
+- status: 429
+  title: Too many requests
+  cause: Exceeded 100 requests/minute globally or 20 audits/hour per key
+  remediation: Retry after the Retry-After header value
+  response_header: Retry-After
+- status: 500
+  title: Internal server error
+  cause: Unexpected backend failure
+  remediation: Retry with exponential backoff
+- status: 502
+  title: Bad gateway
+  cause: Output temporarily malformed
+  remediation: Retry the request
+- status: 503
+  title: Service unavailable
+  cause: Service temporarily down
+  remediation: Retry with a backoff strategy

@@ -1,0 +1,11 @@
+generated: '2026-09-10'
+method: searched
+source: registry searches 2026-09-10
+note: >-
+  No first-party client SDK was found. npm registry search for "geocitation"
+  returned no packages; pypi.org/pypi/geocitation/json returned 404; the docs
+  (getting-started, documentation) publish only raw HTTP/curl examples and mention
+  no SDK, CLI, or Postman collection. The marketing site references n8n / Claude
+  Code / LangChain / CrewAI compatibility, but those are ordinary HTTP integrations,
+  not published client libraries. No SDKs pointer emitted.
+packages: []

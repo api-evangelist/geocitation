@@ -1,0 +1,12 @@
+generated: '2026-09-10'
+method: generated
+source: openapi/geocitation-openapi.json + https://www.geocitation.io/en/documentation
+skills:
+- file: geocitation-run-market-audit.md
+  name: Run a GEOCitation Market audit and retrieve the report
+  api: openapi/geocitation-openapi.json
+  operations: [create_audit_v1_audits_post, get_audit_status_v1_audits__audit_id__status_get, get_audit_v1_audits__audit_id__get, get_document_v1_audits__audit_id__documents__doc_type__get]
+- file: geocitation-run-gap-audit.md
+  name: Run a GEOCitation Gap-Analysis audit for a URL
+  api: openapi/geocitation-openapi.json
+  operations: [create_audit_v1_audits_post, list_audit_events_v1_audits__audit_id__events_get, get_audit_v1_audits__audit_id__get, get_document_v1_audits__audit_id__documents__doc_type__get, read_usage_v1_usage_get]
