@@ -1,0 +1,53 @@
+name: GEOCitation
+description: >-
+  White-label AEO/GEO (Answer Engine / Generative Engine Optimization) audit API for SEO agencies and SaaS platforms. A
+  single async REST API that runs AI-visibility/citation-gap audits and returns structured JSON with citation
+  probabilities, entity/semantic-cluster data, E-E-A-T scores, and content recommendations.
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/white-label-seo-geo-audit-api-for-agency-geocitation/refs/heads/main/apis.yml
+created: '2026-09-10'
+modified: '2026-09-10'
+specificationVersion: '0.21'
+tags:
+  - SEO
+  - GEO
+  - AEO
+  - AI Search Visibility
+  - Content Intelligence
+  - Competitive Intelligence
+  - Marketing
+  - MarTech
+  - White-label
+  - Agency Tooling
+  - Web Data & Analytics
+apis:
+  - name: GEOCitation Audit API
+    description: >-
+      Asynchronous REST API to launch AEO/GEO audits (Market Intelligence and Gap Analysis), poll status, and retrieve
+      structured JSON output. API-key auth via X-API-Key header; HMAC-SHA256 signed webhooks for audit.completed and
+      audit.failed events.
+    humanURL: https://www.geocitation.io/en/documentation
+    baseURL: https://api.geocitation.io/v1
+    tags:
+      - SEO
+      - GEO
+      - AEO
+      - AI Search Visibility
+      - Content Intelligence
+      - Competitive Intelligence
+      - Marketing
+      - MarTech
+      - White-label
+      - Agency Tooling
+      - Web Data & Analytics
+    properties:
+      - type: Documentation
+        url: https://www.geocitation.io/en/documentation
+maintainers:
+  - FN: GEOCitation Support
+    url: mailto:support@geocitation.io
+generated:
+  by: apis.io/add
+  model: claude-opus-4-8
+  confidence: 85
+  at: '2026-09-10T18:03:24.975Z'
