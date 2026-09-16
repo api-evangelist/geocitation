@@ -9,6 +9,18 @@ modified: '2026-09-10'
 specificationVersion: '0.21'
 tags:
 - SEO
+- Geo
+- AEO
+- AI Search Visibility
+- Content Intelligence
+- Competitive Intelligence
+- Marketing
+- MarTech
+- White Label
+- Agency Tooling
+- Web Data & Analytics
+tags_raw:
+- SEO
 - GEO
 - AEO
 - AI Search Visibility
@@ -20,30 +32,78 @@ tags:
 - Agency Tooling
 - Web Data & Analytics
 apis:
-- name: GEOCitation Audit API
-  description: Asynchronous REST API to launch AEO/GEO audits (Market Intelligence and Gap Analysis),
-    poll status, and retrieve structured JSON output. API-key auth via X-API-Key header; HMAC-SHA256 signed
-    webhooks for audit.completed and audit.failed events.
+- aid: geocitation:geocitation-audits-api
+  name: GEOCitation Audits API
+  description: The audits API from GEOCitation — 8 operation(s) for audits.
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
-  - SEO
-  - GEO
-  - AEO
-  - AI Search Visibility
-  - Content Intelligence
-  - Competitive Intelligence
-  - Marketing
-  - MarTech
-  - White-label
-  - Agency Tooling
-  - Web Data & Analytics
+  - audits
   properties:
   - type: OpenAPI
-    url: openapi/geocitation-openapi.json
+    url: openapi/geocitation-audits-api-openapi.yml
   - type: APIReference
     url: https://api.geocitation.io/docs
-  image: https://www.geocitation.io/icon.svg
+- aid: geocitation:geocitation-gdpr-api
+  name: GEOCitation Gdpr API
+  description: The gdpr API from GEOCitation — 1 operation(s) for gdpr.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
+  - gdpr
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-gdpr-api-openapi.yml
+  - type: APIReference
+    url: https://api.geocitation.io/docs
+- aid: geocitation:geocitation-health-api
+  name: GEOCitation Health API
+  description: The health API from GEOCitation — 2 operation(s) for health.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
+  - health
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-health-api-openapi.yml
+  - type: APIReference
+    url: https://api.geocitation.io/docs
+- aid: geocitation:geocitation-meta-api
+  name: GEOCitation Meta API
+  description: The meta API from GEOCitation — 3 operation(s) for meta.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
+  - meta
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-meta-api-openapi.yml
+  - type: APIReference
+    url: https://api.geocitation.io/docs
+- aid: geocitation:geocitation-opt-out-api
+  name: GEOCitation Opt Out API
+  description: The opt-out API from GEOCitation — 1 operation(s) for opt-out.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
+  - opt-out
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-opt-out-api-openapi.yml
+  - type: APIReference
+    url: https://api.geocitation.io/docs
+- aid: geocitation:geocitation-usage-api
+  name: GEOCitation Usage API
+  description: The usage API from GEOCitation — 1 operation(s) for usage.
+  humanURL: https://www.geocitation.io/en/documentation
+  baseURL: https://api.geocitation.io/v1
+  tags:
+  - usage
+  properties:
+  - type: OpenAPI
+    url: openapi/geocitation-usage-api-openapi.yml
+  - type: APIReference
+    url: https://api.geocitation.io/docs
 maintainers:
 - FN: GEOCitation Support
   url: https://www.geocitation.io
