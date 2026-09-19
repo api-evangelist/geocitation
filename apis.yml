@@ -38,6 +38,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - Audit
+  tags_raw:
   - audits
   properties:
   - type: OpenAPI
@@ -50,6 +52,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - GDPR
+  tags_raw:
   - gdpr
   properties:
   - type: OpenAPI
@@ -62,6 +66,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -74,6 +80,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - Meta
+  tags_raw:
   - meta
   properties:
   - type: OpenAPI
@@ -86,6 +94,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - opt Out
+  tags_raw:
   - opt-out
   properties:
   - type: OpenAPI
@@ -98,6 +108,8 @@ apis:
   humanURL: https://www.geocitation.io/en/documentation
   baseURL: https://api.geocitation.io/v1
   tags:
+  - Usage
+  tags_raw:
   - usage
   properties:
   - type: OpenAPI
