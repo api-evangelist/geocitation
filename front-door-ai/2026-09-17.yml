@@ -1,0 +1,30 @@
+# Front Door AI Index — geocitation — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: geocitation
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.geocitation.io
+  final_host: www.geocitation.io
+  ownership: own
+  owner: geocitation
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 24
+  host_score: 24
+  density: 19.67
+  words: 1220
+  tiers:
+    agentic: 1
+    core: 21
+    model: 2
+  ambiguous: 3
+  top_terms:
+    AI: 14
+    LLMs: 7
+    Claude: 2
+    intelligence: 2
+    AI agent: 1
+    agent: 1

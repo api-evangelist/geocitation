@@ -1,0 +1,758 @@
+openapi: 3.2.0
+info:
+  title: GEOCitation Audits API
+  description: Citation Rank Intelligence — Content Gap & Market Audit API
+  version: 0.1.0
+tags:
+- name: Audits
+paths:
+  /v1/audits:
+    post:
+      tags:
+      - Audits
+      summary: Créer un audit (Market ou Gap)
+      operationId: create_audit_v1_audits_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      - name: X-Recaptcha-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Recaptcha-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditCreateRequest'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditCreateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Audits
+      summary: Liste paginée des audits de l'utilisateur
+      operationId: list_audits_v1_audits_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Page Size
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: audit_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audit Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_AuditListItem_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/stream:
+    get:
+      tags:
+      - Audits
+      summary: SSE — événements live de l'audit
+      operationId: stream_audit_v1_audits__audit_id__stream_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/status:
+    get:
+      tags:
+      - Audits
+      summary: Statut léger (fallback si SSE bloqué)
+      operationId: get_audit_status_v1_audits__audit_id__status_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/events:
+    get:
+      tags:
+      - Audits
+      summary: Replay des events d'un audit (hydratation initiale frontend)
+      description: 'Sprint Emergency E1.7 (2026-04-22) — Retourne l''historique complet des
+
+        events de l''audit pour hydratation Realtime frontend.
+
+
+        Utilisation côté client :
+
+        1. Au mount de la page audit, fetch `GET /v1/audits/{id}/events`
+
+        2. Subscribe Supabase Realtime pour les nouveaux INSERTs
+
+        3. Merger les deux streams pour affichage fluide sans trou de progression
+
+
+        Ordre : chronologique ASC (par `created_at`). Limit safe = 200 events
+
+        (un audit complet typique émet 50-100 events). Augmente via `?limit=` si
+
+        besoin (max 500).'
+      operationId: list_audit_events_v1_audits__audit_id__events_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          default: 200
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/retry-doc/{doc_slot}:
+    post:
+      tags:
+      - Audits
+      summary: Relancer le noeud DOC individuel (I-DOC-RETRY)
+      description: 'I-DOC-RETRY : relance le noeud DOC unique (6 docs asyncio.gather) sans
+
+        relancer tout l''audit. Utile quand le noeud DOC a timeout (Cloud Tasks lost).
+
+        Sprint MIGRATION DOC SINGLE NODE (2026-05-25) : 1 noeud terminal (vs 3 legacy).
+
+        doc_slot accepté : ''DOC'' uniquement.'
+      operationId: retry_doc_node_v1_audits__audit_id__retry_doc__doc_slot__post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      - name: doc_slot
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Doc Slot
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Retry Doc Node V1 Audits  Audit Id  Retry Doc  Doc Slot  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}:
+    get:
+      tags:
+      - Audits
+      summary: Statut + output JSON complet (output=null tant que non completed)
+      description: 'Sprint 1 API Data Semantic (2026-07-17) : dernière étape du flow
+
+        intégrateur POST /v1/audits → poll GET .../status → GET .../{id}.
+
+
+        output=None tant que status != completed. Une fois completed, output
+
+        contient le JSON complet produit par le node DOC (doc_qa), lu depuis GCS.'
+      operationId: get_audit_v1_audits__audit_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Audit V1 Audits  Audit Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/documents/{doc_type}:
+    get:
+      tags:
+      - Audits
+      summary: Récupérer un document Markdown (audit status=completed uniquement)
+      description: 'Sprint 15.A.1 Directive Auditeur : serve raw markdown via Content-Type: text/markdown.
+
+
+        Pas de wrapping JSON, pas de fuite d''URL GCS. Le backend telecharge
+
+        depuis GCS si __gcs_ref sentinel detecte, decode UTF-8, et renvoie
+
+        Response(media_type="text/markdown").'
+      operationId: get_document_v1_audits__audit_id__documents__doc_type__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      - name: doc_type
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DocType'
+      responses:
+        '200':
+          description: Markdown document content (text/markdown)
+          content:
+            application/json:
+              schema: {}
+            text/markdown: {}
+        '404':
+          description: Document not found
+        '409':
+          description: Audit not yet completed
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/audits/{audit_id}/manifest:
+    get:
+      tags:
+      - Audits
+      summary: Récupérer le manifest.json SOC2 bank-proof (audit status=completed uniquement)
+      description: 'Sprint 15.A.1 : expose le manifest SOC2 via API authentifiee (RLS via clerk_id).
+
+
+        Contient git_commit_sha + weights_hash + pipeline_version + proxy_scraping_map
+
+        + n20_provenance + outputs_checksums + llm_calls + invariants_report.
+
+        Utilise par test_audit_e2e.py pour verification checksums runtime.'
+      operationId: get_manifest_v1_audits__audit_id__manifest_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: audit_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Audit Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Manifest V1 Audits  Audit Id  Manifest Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AuditStatusResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        current_step:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Step
+        current_node:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Node
+        progress_pct:
+          type: integer
+          maximum: 100.0
+          minimum: 0.0
+          title: Progress Pct
+        elapsed_ms:
+          type: integer
+          title: Elapsed Ms
+        nodes_completed:
+          type: integer
+          title: Nodes Completed
+        nodes_total:
+          type: integer
+          title: Nodes Total
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+      type: object
+      required:
+      - audit_id
+      - status
+      - progress_pct
+      - elapsed_ms
+      - nodes_completed
+      - nodes_total
+      title: AuditStatusResponse
+    AuditCreateRequest:
+      properties:
+        audit_type:
+          $ref: '#/components/schemas/AuditType'
+        keyword:
+          type: string
+          maxLength: 200
+          minLength: 2
+          title: Keyword
+        user_url:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: User Url
+        language:
+          allOf:
+          - $ref: '#/components/schemas/Language'
+          default: en
+        country:
+          allOf:
+          - $ref: '#/components/schemas/SupportedCountry'
+          default: US
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          default: auto
+      type: object
+      required:
+      - audit_type
+      - keyword
+      title: AuditCreateRequest
+    AuditEventsResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        events:
+          items:
+            $ref: '#/components/schemas/AuditEventItem'
+          type: array
+          title: Events
+        total:
+          type: integer
+          title: Total
+        returned:
+          type: integer
+          title: Returned
+      type: object
+      required:
+      - audit_id
+      - events
+      - total
+      - returned
+      title: AuditEventsResponse
+      description: Replay paginé des events pour un audit.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AuditCreateResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        stream_url:
+          type: string
+          title: Stream Url
+      type: object
+      required:
+      - audit_id
+      - status
+      - created_at
+      - stream_url
+      title: AuditCreateResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AuditListItem:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        audit_type:
+          $ref: '#/components/schemas/AuditType'
+        keyword:
+          type: string
+          title: Keyword
+        user_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Url
+        language:
+          $ref: '#/components/schemas/Language'
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        citation_rank_value:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Citation Rank Value
+      type: object
+      required:
+      - audit_id
+      - audit_type
+      - keyword
+      - language
+      - status
+      - created_at
+      title: AuditListItem
+    Intent:
+      type: string
+      enum:
+      - auto
+      - informational
+      - commercial
+      - transactional
+      title: Intent
+    AuditType:
+      type: string
+      enum:
+      - market
+      - gap
+      title: AuditType
+    PaginatedResponse_AuditListItem_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AuditListItem'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        has_next:
+          type: boolean
+          title: Has Next
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - page_size
+      - has_next
+      title: PaginatedResponse[AuditListItem]
+    AuditEventItem:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        event_type:
+          type: string
+          title: Event Type
+        node_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Node Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        progress_pct:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Progress Pct
+        payload:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Payload
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - audit_id
+      - event_type
+      - created_at
+      title: AuditEventItem
+      description: 'Un événement d''audit (row de `audit_events` table).
+
+
+        Sprint Emergency E1.7 (2026-04-22) — replay historique pour hydratation
+
+        frontend au mount de la page audit. Permet d''afficher la progression
+
+        complète même si l''utilisateur arrive après que les events live sont
+
+        déjà passés (fix "progression figée 0%").'
+    SupportedCountry:
+      type: string
+      enum:
+      - BE
+      - CA
+      - CH
+      - DE
+      - ES
+      - FR
+      - GB
+      - JP
+      - MA
+      - SN
+      - US
+      title: SupportedCountry
+      description: 'Sprint Country-Production (2026-04-21) + Sprint SPR (2026-04-23) :
+
+        10 pays Decodo Residential supportés E2E via endpoints dédiés
+
+        (fr.decodo.com, ma.decodo.com, ...).
+
+
+        Cette enum est INLINE pour garder le runtime backend autonome (pas de dépendance
+
+        sur lab/ qui n''est ni copié dans le Dockerfile ni accessible quand le build context
+
+        est `backend/`). La source de vérité opérationnelle reste lab/config/countries.yaml,
+
+        consommée par l''orchestrator + page_collector. Drift detection : test_country_matrix.py
+
+        charge le YAML et vérifie l''égalité keys(YAML) == set(SupportedCountry).
+
+
+        Sprint SPR : T3.9 résolu — CH/MA/SN natifs Decodo Residential (ch.decodo.com:29000,
+
+        ma.decodo.com:40000, sn.decodo.com:49000).
+
+
+        Sprint N04 V2 J4 D1 (2026-05-14) — extension worldwide JP (jp.decodo.com:30000).'
+    Language:
+      type: string
+      enum:
+      - fr
+      - en
+      title: Language
+    DocType:
+      type: string
+      enum:
+      - content_gap_report
+      - remediation_blueprint
+      - laser_optimization_brief
+      - citation_gap_report
+      - semantic_blueprint
+      - laser_execution_outline
+      title: DocType
+    AuditStatus:
+      type: string
+      enum:
+      - pending
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: AuditStatus
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

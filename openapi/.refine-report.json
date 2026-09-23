@@ -1,0 +1,36 @@
+{
+  "provider": "geocitation",
+  "sources": [
+    "_original/geocitation-openapi.json"
+  ],
+  "outputs": [
+    "geocitation-audits-api-openapi.yml",
+    "geocitation-gdpr-api-openapi.yml",
+    "geocitation-health-api-openapi.yml",
+    "geocitation-meta-api-openapi.yml",
+    "geocitation-opt-out-api-openapi.yml",
+    "geocitation-usage-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "geocitation-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "geocitation-openapi.json: declared missing tag: audits",
+    "geocitation-openapi.json: declared missing tag: gdpr",
+    "geocitation-openapi.json: declared missing tag: health",
+    "geocitation-openapi.json: declared missing tag: meta",
+    "geocitation-openapi.json: declared missing tag: opt-out",
+    "geocitation-openapi.json: declared missing tag: usage",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "geocitation-audits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "geocitation-gdpr-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "geocitation-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "geocitation-meta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "geocitation-opt-out-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "geocitation-usage-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

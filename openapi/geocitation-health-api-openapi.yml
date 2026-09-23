@@ -1,0 +1,65 @@
+openapi: 3.2.0
+info:
+  title: GEOCitation Health API
+  description: Citation Rank Intelligence — Content Gap & Market Audit API
+  version: 0.1.0
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      tags:
+      - Health
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /health/detailed:
+    get:
+      tags:
+      - Health
+      summary: Health Detailed
+      description: 'Health détaillé — Redis + circuit breaker + version.
+
+
+        Utilisé pour le monitoring Cloud Monitoring et les alertes Sentry.
+
+        Ne retourne jamais 5xx (les dépendances dégradées sont loggées, pas crashantes).'
+      operationId: health_detailed_health_detailed_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Health Detailed Health Detailed Get
+components:
+  schemas:
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          default: ok
+        version:
+          type: string
+          title: Version
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+      type: object
+      required:
+      - version
+      - timestamp
+      title: HealthResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

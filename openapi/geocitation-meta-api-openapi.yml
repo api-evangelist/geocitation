@@ -1,0 +1,99 @@
+openapi: 3.2.0
+info:
+  title: GEOCitation Meta API
+  description: Citation Rank Intelligence — Content Gap & Market Audit API
+  version: 0.1.0
+tags:
+- name: Meta
+paths:
+  /v1/meta/kpi-catalog:
+    get:
+      tags:
+      - Meta
+      summary: Catalogue complet des KPIs (35 N20 + 15 pépites)
+      operationId: get_kpi_catalog_v1_meta_kpi_catalog_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Kpi Catalog V1 Meta Kpi Catalog Get
+  /v1/meta/icp-priority/{icp_key}:
+    get:
+      tags:
+      - Meta
+      summary: Priorité KPIs pour un ICP
+      operationId: get_icp_priority_v1_meta_icp_priority__icp_key__get
+      parameters:
+      - name: icp_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Icp Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Icp Priority V1 Meta Icp Priority  Icp Key  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/meta/branding:
+    get:
+      tags:
+      - Meta
+      summary: Labels métier FR/EN pour les 50 KPIs
+      operationId: get_branding_v1_meta_branding_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Branding V1 Meta Branding Get
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

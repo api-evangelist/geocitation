@@ -1,0 +1,30 @@
+openapi: 3.2.0
+info:
+  title: GEOCitation Usage API
+  description: Citation Rank Intelligence — Content Gap & Market Audit API
+  version: 0.1.0
+tags:
+- name: Usage
+paths:
+  /v1/usage:
+    get:
+      tags:
+      - Usage
+      summary: État du quota d'audits de l'utilisateur (plan, used, limit, remaining)
+      description: Retourne { plan, limit, used, remaining, active } pour l'user connecté.
+      operationId: read_usage_v1_usage_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Read Usage V1 Usage Get
+      security:
+      - HTTPBearer: []
+components:
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

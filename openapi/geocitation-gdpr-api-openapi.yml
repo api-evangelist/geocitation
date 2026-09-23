@@ -1,0 +1,177 @@
+openapi: 3.2.0
+info:
+  title: GEOCitation Gdpr API
+  description: Citation Rank Intelligence — Content Gap & Market Audit API
+  version: 0.1.0
+tags:
+- name: GDPR
+paths:
+  /v1/opt-out:
+    post:
+      tags:
+      - GDPR
+      summary: Ajouter un domaine à la liste opt-out GDPR (admin only)
+      description: 'Ajoute un domaine à la liste opt-out.
+
+
+        Sprint N04 V2 J4 D5 (2026-05-14) — GDPR enterprise.
+
+
+        Auth : admin only via `require_admin` (whitelist env var OR JWT role=admin).
+
+        Storage : Supabase `domain_opt_outs` (m028) avec RLS service_role/admin only.
+
+        Effets : N04 cache Redis 1h sera invalidé pour ce domaine.'
+      operationId: create_opt_out_v1_opt_out_post
+      security:
+      - HTTPBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptOutCreateRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptOutCreateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - GDPR
+      summary: Liste des domaines opt-out (admin only)
+      description: 'Liste les domaines opt-out, filtrés par status (défaut: ''active'').'
+      operationId: list_opt_outs_v1_opt_out_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: status_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: active
+          title: Status Filter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Opt Outs V1 Opt Out Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OptOutCreateRequest:
+      properties:
+        domain:
+          type: string
+          maxLength: 253
+          minLength: 4
+          title: Domain
+          description: 'Domain TLD+1 (sera normalisé : lowercase, no www, no scheme/port/path)'
+          example: example.com
+        requested_by_email:
+          type: string
+          format: email
+          title: Requested By Email
+          description: Email contact de la personne qui a fait la demande (audit trail GDPR)
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: 'Motif libre (ex: Article 21 GDPR, rights of erasure, DMCA)'
+        verified_via:
+          anyOf:
+          - type: string
+            pattern: ^(email_confirm|dmca_takedown|manual_admin)$
+          - type: 'null'
+          title: Verified Via
+          description: Méthode de vérification de la demande
+      type: object
+      required:
+      - domain
+      - requested_by_email
+      title: OptOutCreateRequest
+      description: Demande d'opt-out GDPR pour un domaine.
+    OptOutCreateResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        domain:
+          type: string
+          title: Domain
+        status:
+          type: string
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        approved_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Approved At
+      type: object
+      required:
+      - id
+      - domain
+      - status
+      - created_at
+      - approved_at
+      title: OptOutCreateResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
