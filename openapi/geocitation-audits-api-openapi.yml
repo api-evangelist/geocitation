@@ -385,175 +385,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AuditStatusResponse:
-      properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        status:
-          $ref: '#/components/schemas/AuditStatus'
-        current_step:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Current Step
-        current_node:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Current Node
-        progress_pct:
-          type: integer
-          maximum: 100.0
-          minimum: 0.0
-          title: Progress Pct
-        elapsed_ms:
-          type: integer
-          title: Elapsed Ms
-        nodes_completed:
-          type: integer
-          title: Nodes Completed
-        nodes_total:
-          type: integer
-          title: Nodes Total
-        error_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Message
-        started_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Started At
-        completed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Completed At
-      type: object
-      required:
-      - audit_id
-      - status
-      - progress_pct
-      - elapsed_ms
-      - nodes_completed
-      - nodes_total
-      title: AuditStatusResponse
-    AuditCreateRequest:
-      properties:
-        audit_type:
-          $ref: '#/components/schemas/AuditType'
-        keyword:
-          type: string
-          maxLength: 200
-          minLength: 2
-          title: Keyword
-        user_url:
-          anyOf:
-          - type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          - type: 'null'
-          title: User Url
-        language:
-          allOf:
-          - $ref: '#/components/schemas/Language'
-          default: en
-        country:
-          allOf:
-          - $ref: '#/components/schemas/SupportedCountry'
-          default: US
-        intent:
-          allOf:
-          - $ref: '#/components/schemas/Intent'
-          default: auto
-      type: object
-      required:
-      - audit_type
-      - keyword
-      title: AuditCreateRequest
-    AuditEventsResponse:
-      properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        events:
-          items:
-            $ref: '#/components/schemas/AuditEventItem'
-          type: array
-          title: Events
-        total:
-          type: integer
-          title: Total
-        returned:
-          type: integer
-          title: Returned
-      type: object
-      required:
-      - audit_id
-      - events
-      - total
-      - returned
-      title: AuditEventsResponse
-      description: Replay paginé des events pour un audit.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AuditCreateResponse:
-      properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        status:
-          $ref: '#/components/schemas/AuditStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        stream_url:
-          type: string
-          title: Stream Url
-      type: object
-      required:
-      - audit_id
-      - status
-      - created_at
-      - stream_url
-      title: AuditCreateResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AuditListItem:
       properties:
         audit_id:
@@ -598,6 +429,56 @@ components:
       - status
       - created_at
       title: AuditListItem
+    AuditType:
+      type: string
+      enum:
+      - market
+      - gap
+      title: AuditType
+    AuditCreateRequest:
+      properties:
+        audit_type:
+          $ref: '#/components/schemas/AuditType'
+        keyword:
+          type: string
+          maxLength: 200
+          minLength: 2
+          title: Keyword
+        user_url:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: User Url
+        language:
+          allOf:
+          - $ref: '#/components/schemas/Language'
+          default: en
+        country:
+          allOf:
+          - $ref: '#/components/schemas/SupportedCountry'
+          default: US
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          default: auto
+      type: object
+      required:
+      - audit_type
+      - keyword
+      title: AuditCreateRequest
+    DocType:
+      type: string
+      enum:
+      - content_gap_report
+      - remediation_blueprint
+      - laser_optimization_brief
+      - citation_gap_report
+      - semantic_blueprint
+      - laser_execution_outline
+      title: DocType
     Intent:
       type: string
       enum:
@@ -606,39 +487,27 @@ components:
       - commercial
       - transactional
       title: Intent
-    AuditType:
-      type: string
-      enum:
-      - market
-      - gap
-      title: AuditType
-    PaginatedResponse_AuditListItem_:
+    ValidationError:
       properties:
-        items:
+        loc:
           items:
-            $ref: '#/components/schemas/AuditListItem'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Items
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        has_next:
-          type: boolean
-          title: Has Next
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - items
-      - total
-      - page
-      - page_size
-      - has_next
-      title: PaginatedResponse[AuditListItem]
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AuditEventItem:
       properties:
         audit_id:
@@ -727,22 +596,6 @@ components:
 
 
         Sprint N04 V2 J4 D1 (2026-05-14) — extension worldwide JP (jp.decodo.com:30000).'
-    Language:
-      type: string
-      enum:
-      - fr
-      - en
-      title: Language
-    DocType:
-      type: string
-      enum:
-      - content_gap_report
-      - remediation_blueprint
-      - laser_optimization_brief
-      - citation_gap_report
-      - semantic_blueprint
-      - laser_execution_outline
-      title: DocType
     AuditStatus:
       type: string
       enum:
@@ -752,6 +605,153 @@ components:
       - failed
       - cancelled
       title: AuditStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AuditStatusResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        current_step:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Step
+        current_node:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Node
+        progress_pct:
+          type: integer
+          maximum: 100.0
+          minimum: 0.0
+          title: Progress Pct
+        elapsed_ms:
+          type: integer
+          title: Elapsed Ms
+        nodes_completed:
+          type: integer
+          title: Nodes Completed
+        nodes_total:
+          type: integer
+          title: Nodes Total
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+      type: object
+      required:
+      - audit_id
+      - status
+      - progress_pct
+      - elapsed_ms
+      - nodes_completed
+      - nodes_total
+      title: AuditStatusResponse
+    AuditCreateResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        stream_url:
+          type: string
+          title: Stream Url
+      type: object
+      required:
+      - audit_id
+      - status
+      - created_at
+      - stream_url
+      title: AuditCreateResponse
+    PaginatedResponse_AuditListItem_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AuditListItem'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        has_next:
+          type: boolean
+          title: Has Next
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - page_size
+      - has_next
+      title: PaginatedResponse[AuditListItem]
+    AuditEventsResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        events:
+          items:
+            $ref: '#/components/schemas/AuditEventItem'
+          type: array
+          title: Events
+        total:
+          type: integer
+          title: Total
+        returned:
+          type: integer
+          title: Returned
+      type: object
+      required:
+      - audit_id
+      - events
+      - total
+      - returned
+      title: AuditEventsResponse
+      description: Replay paginé des events pour un audit.
+    Language:
+      type: string
+      enum:
+      - fr
+      - en
+      title: Language
   securitySchemes:
     HTTPBearer:
       type: http
