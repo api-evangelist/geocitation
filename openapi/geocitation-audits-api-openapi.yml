@@ -385,37 +385,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AuditCreateResponse:
+    HTTPValidationError:
       properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        status:
-          $ref: '#/components/schemas/AuditStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        stream_url:
-          type: string
-          title: Stream Url
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - audit_id
-      - status
-      - created_at
-      - stream_url
-      title: AuditCreateResponse
-    AuditStatus:
-      type: string
-      enum:
-      - pending
-      - running
-      - completed
-      - failed
-      - cancelled
-      title: AuditStatus
+      title: HTTPValidationError
     AuditEventsResponse:
       properties:
         audit_id:
@@ -441,15 +419,281 @@ components:
       - returned
       title: AuditEventsResponse
       description: Replay paginé des events pour un audit.
-    HTTPValidationError:
+    Language:
+      type: string
+      enum:
+      - fr
+      - en
+      title: Language
+    PaginatedResponse_AuditListItem_:
       properties:
-        detail:
+        items:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/AuditListItem'
           type: array
-          title: Detail
+          title: Items
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        has_next:
+          type: boolean
+          title: Has Next
       type: object
-      title: HTTPValidationError
+      required:
+      - items
+      - total
+      - page
+      - page_size
+      - has_next
+      title: PaginatedResponse[AuditListItem]
+    AuditEventItem:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        event_type:
+          type: string
+          title: Event Type
+        node_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Node Id
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        progress_pct:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Progress Pct
+        payload:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Payload
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - audit_id
+      - event_type
+      - created_at
+      title: AuditEventItem
+      description: 'Un événement d''audit (row de `audit_events` table).
+
+
+        Sprint Emergency E1.7 (2026-04-22) — replay historique pour hydratation
+
+        frontend au mount de la page audit. Permet d''afficher la progression
+
+        complète même si l''utilisateur arrive après que les events live sont
+
+        déjà passés (fix "progression figée 0%").'
+    AuditListItem:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        audit_type:
+          $ref: '#/components/schemas/AuditType'
+        keyword:
+          type: string
+          title: Keyword
+        user_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Url
+        language:
+          $ref: '#/components/schemas/Language'
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        citation_rank_value:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Citation Rank Value
+      type: object
+      required:
+      - audit_id
+      - audit_type
+      - keyword
+      - language
+      - status
+      - created_at
+      title: AuditListItem
+    AuditCreateRequest:
+      properties:
+        audit_type:
+          $ref: '#/components/schemas/AuditType'
+        keyword:
+          type: string
+          maxLength: 200
+          minLength: 2
+          title: Keyword
+        user_url:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: User Url
+        language:
+          allOf:
+          - $ref: '#/components/schemas/Language'
+          default: en
+        country:
+          allOf:
+          - $ref: '#/components/schemas/SupportedCountry'
+          default: US
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          default: auto
+      type: object
+      required:
+      - audit_type
+      - keyword
+      title: AuditCreateRequest
+    AuditType:
+      type: string
+      enum:
+      - market
+      - gap
+      title: AuditType
+    DocType:
+      type: string
+      enum:
+      - content_gap_report
+      - remediation_blueprint
+      - laser_optimization_brief
+      - citation_gap_report
+      - semantic_blueprint
+      - laser_execution_outline
+      title: DocType
+    SupportedCountry:
+      type: string
+      enum:
+      - BE
+      - CA
+      - CH
+      - DE
+      - ES
+      - FR
+      - GB
+      - JP
+      - MA
+      - SN
+      - US
+      title: SupportedCountry
+      description: 'Sprint Country-Production (2026-04-21) + Sprint SPR (2026-04-23) :
+
+        10 pays Decodo Residential supportés E2E via endpoints dédiés
+
+        (fr.decodo.com, ma.decodo.com, ...).
+
+
+        Cette enum est INLINE pour garder le runtime backend autonome (pas de dépendance
+
+        sur lab/ qui n''est ni copié dans le Dockerfile ni accessible quand le build context
+
+        est `backend/`). La source de vérité opérationnelle reste lab/config/countries.yaml,
+
+        consommée par l''orchestrator + page_collector. Drift detection : test_country_matrix.py
+
+        charge le YAML et vérifie l''égalité keys(YAML) == set(SupportedCountry).
+
+
+        Sprint SPR : T3.9 résolu — CH/MA/SN natifs Decodo Residential (ch.decodo.com:29000,
+
+        ma.decodo.com:40000, sn.decodo.com:49000).
+
+
+        Sprint N04 V2 J4 D1 (2026-05-14) — extension worldwide JP (jp.decodo.com:30000).'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AuditStatus:
+      type: string
+      enum:
+      - pending
+      - running
+      - completed
+      - failed
+      - cancelled
+      title: AuditStatus
+    Intent:
+      type: string
+      enum:
+      - auto
+      - informational
+      - commercial
+      - transactional
+      title: Intent
+    AuditCreateResponse:
+      properties:
+        audit_id:
+          type: string
+          format: uuid
+          title: Audit Id
+        status:
+          $ref: '#/components/schemas/AuditStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        stream_url:
+          type: string
+          title: Stream Url
+      type: object
+      required:
+      - audit_id
+      - status
+      - created_at
+      - stream_url
+      title: AuditCreateResponse
     AuditStatusResponse:
       properties:
         audit_id:
@@ -508,250 +752,6 @@ components:
       - nodes_completed
       - nodes_total
       title: AuditStatusResponse
-    Intent:
-      type: string
-      enum:
-      - auto
-      - informational
-      - commercial
-      - transactional
-      title: Intent
-    SupportedCountry:
-      type: string
-      enum:
-      - BE
-      - CA
-      - CH
-      - DE
-      - ES
-      - FR
-      - GB
-      - JP
-      - MA
-      - SN
-      - US
-      title: SupportedCountry
-      description: 'Sprint Country-Production (2026-04-21) + Sprint SPR (2026-04-23) :
-
-        10 pays Decodo Residential supportés E2E via endpoints dédiés
-
-        (fr.decodo.com, ma.decodo.com, ...).
-
-
-        Cette enum est INLINE pour garder le runtime backend autonome (pas de dépendance
-
-        sur lab/ qui n''est ni copié dans le Dockerfile ni accessible quand le build context
-
-        est `backend/`). La source de vérité opérationnelle reste lab/config/countries.yaml,
-
-        consommée par l''orchestrator + page_collector. Drift detection : test_country_matrix.py
-
-        charge le YAML et vérifie l''égalité keys(YAML) == set(SupportedCountry).
-
-
-        Sprint SPR : T3.9 résolu — CH/MA/SN natifs Decodo Residential (ch.decodo.com:29000,
-
-        ma.decodo.com:40000, sn.decodo.com:49000).
-
-
-        Sprint N04 V2 J4 D1 (2026-05-14) — extension worldwide JP (jp.decodo.com:30000).'
-    AuditListItem:
-      properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        audit_type:
-          $ref: '#/components/schemas/AuditType'
-        keyword:
-          type: string
-          title: Keyword
-        user_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Url
-        language:
-          $ref: '#/components/schemas/Language'
-        status:
-          $ref: '#/components/schemas/AuditStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        completed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Completed At
-        citation_rank_value:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Citation Rank Value
-      type: object
-      required:
-      - audit_id
-      - audit_type
-      - keyword
-      - language
-      - status
-      - created_at
-      title: AuditListItem
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PaginatedResponse_AuditListItem_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/AuditListItem'
-          type: array
-          title: Items
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        has_next:
-          type: boolean
-          title: Has Next
-      type: object
-      required:
-      - items
-      - total
-      - page
-      - page_size
-      - has_next
-      title: PaginatedResponse[AuditListItem]
-    AuditType:
-      type: string
-      enum:
-      - market
-      - gap
-      title: AuditType
-    DocType:
-      type: string
-      enum:
-      - content_gap_report
-      - remediation_blueprint
-      - laser_optimization_brief
-      - citation_gap_report
-      - semantic_blueprint
-      - laser_execution_outline
-      title: DocType
-    AuditCreateRequest:
-      properties:
-        audit_type:
-          $ref: '#/components/schemas/AuditType'
-        keyword:
-          type: string
-          maxLength: 200
-          minLength: 2
-          title: Keyword
-        user_url:
-          anyOf:
-          - type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          - type: 'null'
-          title: User Url
-        language:
-          allOf:
-          - $ref: '#/components/schemas/Language'
-          default: en
-        country:
-          allOf:
-          - $ref: '#/components/schemas/SupportedCountry'
-          default: US
-        intent:
-          allOf:
-          - $ref: '#/components/schemas/Intent'
-          default: auto
-      type: object
-      required:
-      - audit_type
-      - keyword
-      title: AuditCreateRequest
-    AuditEventItem:
-      properties:
-        audit_id:
-          type: string
-          format: uuid
-          title: Audit Id
-        event_type:
-          type: string
-          title: Event Type
-        node_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Node Id
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-        progress_pct:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Progress Pct
-        payload:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Payload
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - audit_id
-      - event_type
-      - created_at
-      title: AuditEventItem
-      description: 'Un événement d''audit (row de `audit_events` table).
-
-
-        Sprint Emergency E1.7 (2026-04-22) — replay historique pour hydratation
-
-        frontend au mount de la page audit. Permet d''afficher la progression
-
-        complète même si l''utilisateur arrive après que les events live sont
-
-        déjà passés (fix "progression figée 0%").'
-    Language:
-      type: string
-      enum:
-      - fr
-      - en
-      title: Language
   securitySchemes:
     HTTPBearer:
       type: http
