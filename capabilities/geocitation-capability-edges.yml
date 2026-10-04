@@ -1,0 +1,27 @@
+slug: geocitation
+provider: GEOCitation
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Audits
+  spec_file: geocitation-audits-api-openapi.yml
+  capability_id: BC-400.60
+  capability_id_l1: BC-400
+  capability_name: Digital Marketing Management
+  confidence: 0.7
+  evidence: '"Créer un audit (Market ou Gap)"; description "Citation Rank Intelligence — Content Gap &
+    Market Audit API"; vendor: "AI-visibility/citation-gap audits ... E-E-A-T scores, and content recommendations"'
+  reason: Despite the tag reading like internal audit, the operations run answer-engine/SEO visibility
+    audits producing citation probabilities and content recommendations — search-visibility optimisation
+    work, i.e. Digital Marketing Management. Some ambiguity with Market Intelligence (BC-400.30), hence
+    0.7.

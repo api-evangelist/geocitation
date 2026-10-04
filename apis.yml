@@ -121,6 +121,9 @@ maintainers:
   url: https://www.geocitation.io
   email: support@geocitation.io
 common:
+- type: CapabilityMap
+  url: capabilities/geocitation-capability-edges.yml
+  name: GEOCitation Business Capability Map
 - type: Website
   url: https://www.geocitation.io
 - type: AgenticAccess
