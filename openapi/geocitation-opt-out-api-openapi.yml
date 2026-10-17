@@ -87,6 +87,40 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    OptOutCreateRequest:
+      properties:
+        domain:
+          type: string
+          maxLength: 253
+          minLength: 4
+          title: Domain
+          description: 'Domain TLD+1 (sera normalisé : lowercase, no www, no scheme/port/path)'
+          example: example.com
+        requested_by_email:
+          type: string
+          format: email
+          title: Requested By Email
+          description: Email contact de la personne qui a fait la demande (audit trail GDPR)
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Reason
+          description: 'Motif libre (ex: Article 21 GDPR, rights of erasure, DMCA)'
+        verified_via:
+          anyOf:
+          - type: string
+            pattern: ^(email_confirm|dmca_takedown|manual_admin)$
+          - type: 'null'
+          title: Verified Via
+          description: Méthode de vérification de la demande
+      type: object
+      required:
+      - domain
+      - requested_by_email
+      title: OptOutCreateRequest
+      description: Demande d'opt-out GDPR pour un domaine.
     OptOutCreateResponse:
       properties:
         id:
@@ -137,40 +171,6 @@ components:
       - msg
       - type
       title: ValidationError
-    OptOutCreateRequest:
-      properties:
-        domain:
-          type: string
-          maxLength: 253
-          minLength: 4
-          title: Domain
-          description: 'Domain TLD+1 (sera normalisé : lowercase, no www, no scheme/port/path)'
-          example: example.com
-        requested_by_email:
-          type: string
-          format: email
-          title: Requested By Email
-          description: Email contact de la personne qui a fait la demande (audit trail GDPR)
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 500
-          - type: 'null'
-          title: Reason
-          description: 'Motif libre (ex: Article 21 GDPR, rights of erasure, DMCA)'
-        verified_via:
-          anyOf:
-          - type: string
-            pattern: ^(email_confirm|dmca_takedown|manual_admin)$
-          - type: 'null'
-          title: Verified Via
-          description: Méthode de vérification de la demande
-      type: object
-      required:
-      - domain
-      - requested_by_email
-      title: OptOutCreateRequest
-      description: Demande d'opt-out GDPR pour un domaine.
   securitySchemes:
     HTTPBearer:
       type: http
