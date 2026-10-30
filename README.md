@@ -64,4 +64,136 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-White-label AEO/GEO (Answer Engine / Generative Engine Optimization) audit API for SEO agencies and SaaS platforms. A single asynchronous REST API that runs AI-visibility / citation-gap audits and returns structured JSON with citation probabilities, entity / semantic-cluster data, E-E-A-T scores, and content recommendations.
+White-label AEO/GEO (Answer Engine / Generative Engine Optimization) audit API for SEO agencies and SaaS platforms. A single async REST API that runs AI-visibility/citation-gap audits and returns structured JSON with citation probabilities, entity/semantic-cluster data, E-E-A-T scores, and content recommendations.
+
+**Areas:** SEO · Geo · Answer Engine Optimization · AI Search Visibility · Content Intelligence · Competitive Intelligence · Marketing · MarTech · White Label · Agency Tooling · Web Data & Analytics
+
+## GEOCitation on APIs.io
+
+Everything profiled for GEOCitation is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/geocitation/](https://apis.io/providers/geocitation/)** — or go straight to one of the APIs or properties below.
+
+### APIs (6)
+
+- [GEOCitation Audits API](https://apis.io/apis/geocitation/geocitation-audits-api/) — The audits API from GEOCitation — 8 operation(s) for audits.
+- [GEOCitation Gdpr API](https://apis.io/apis/geocitation/geocitation-gdpr-api/) — The gdpr API from GEOCitation — 1 operation(s) for gdpr.
+- [GEOCitation Health API](https://apis.io/apis/geocitation/geocitation-health-api/) — The health API from GEOCitation — 2 operation(s) for health.
+- [GEOCitation Meta API](https://apis.io/apis/geocitation/geocitation-meta-api/) — The meta API from GEOCitation — 3 operation(s) for meta.
+- [GEOCitation Opt Out API](https://apis.io/apis/geocitation/geocitation-opt-out-api/) — The opt-out API from GEOCitation — 1 operation(s) for opt-out.
+- [GEOCitation Usage API](https://apis.io/apis/geocitation/geocitation-usage-api/) — The usage API from GEOCitation — 1 operation(s) for usage.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Geocitation Webhooks](https://apis.io/asyncapis/geocitation/geocitation-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [geocitation](https://apis.io/servers/geocitation/geocitation/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Geocitation Agentic Access](https://apis.io/agentic-access/geocitation/geocitation-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Geocitation Openapi Overlay](https://apis.io/overlays/geocitation/geocitation-openapi-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Geocitation Authentication](https://apis.io/security/geocitation/geocitation-authentication/)
+- [Geocitation Domain Security](https://apis.io/security/geocitation/geocitation-domain-security/)
+- [Geocitation Trust Center](https://apis.io/security/geocitation/geocitation-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Geocitation Plans Pricing](https://apis.io/plans/geocitation/geocitation-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Geocitation Rate Limits](https://apis.io/rate-limits/geocitation/geocitation-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.geocitation.io)
+- [Documentation](https://www.geocitation.io/en/documentation)
+- [Getting started](https://www.geocitation.io/en/documentation/getting-started)
+- [Pricing](https://www.geocitation.io/en/pricing)
+- [Sign up](https://www.geocitation.io/en/login)
+- [Support](https://www.geocitation.io/en/contact)
+- [Compliance](https://www.geocitation.io/en/security)
+- [Terms of service](https://www.geocitation.io/en/terms)
+- [Privacy policy](https://www.geocitation.io/en/privacy)
+
+## API Evangelist rating
+
+**Kin Score 55.8** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 48.4 |
+| Contract governance | 18.2 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 56.5 |
+| Access clarity | 92.1 |
+
+**Agent readiness 38.9** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/geocitation/](https://apis.io/providers/geocitation/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for GEOCitation: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/geocitation/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
